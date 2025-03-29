@@ -1,0 +1,27 @@
+TD3 modified version with CM, this one definitely works! Don't mess up!
+
+熵系数变大：当前策略的熵小于目标熵（huber_distance 小于 self.target_huber_distance），策略需要增加随机性。
+熵系数变小：当前策略的熵大于目标熵（huber_distance 大于 self.target_huber_distance），策略需要减少随机性。
+
+LOG_STD_MAX = 2 # avoid too small
+LOG_STD_MIN = -20 # avoid too large
+
+TODO, introduce a action corrector here
+
+
+1. Use similar noise process in actor loss
+2. Remove tedious sample process and make it through sample from multi-actions and adding noise 
+
+
+Figure out what CM loss exactly mean in online RL
+
+
+
+Min -17.288009643554688
+Max 36.31298
+
+1. We should encourage the outliers actions in critic loss section
+2. We should encourage the policy to generate more diverse actions 
+
+huber_coef can be negative, which is not what we want
+huber distances are small, need to check which part go wrong
