@@ -15,7 +15,7 @@ from stable_baselines3.common.policies import BasePolicy
 from diff_rl.common.policies import ContinuousCritic
 from diff_rl.common.buffers import ReplayBuffer
 from diff_rl.common.off_policy_algorithm import OffPolicyAlgorithm
-from diff_rl.diff_rl.policies import Actor, MlpPolicy, TD3Policy
+from diff_rl.diff_rl.policies import Actor, MlpPolicy, TD3Policy, Corrector
 
 SelfTD3 = TypeVar("SelfTD3", bound="TD3")
 
@@ -30,6 +30,8 @@ class TD3(OffPolicyAlgorithm):
     actor_target: Actor
     critic: ContinuousCritic
     critic_target: ContinuousCritic
+    corrector: Corrector
+    corrector_target: Corrector
 
     def __init__(
         self,
@@ -172,7 +174,6 @@ class TD3(OffPolicyAlgorithm):
                                               )
                 bc_losses = compute_bc_losses() # but here take loss rather than consistency_loss
 
-                # TODO, consistency loss need to be modify here, since it's actually a regression learning
                 actor_loss = bc_losses["consistency_losses"]
                 actor_losses.append(actor_loss.item())
 

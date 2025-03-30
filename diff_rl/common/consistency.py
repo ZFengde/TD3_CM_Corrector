@@ -139,7 +139,6 @@ class Consistency_Model:
 
         return terms
 
-    # TODO, add a corrector here to     
     def denoise(self, model, corrector, x_t, sigmas, state): # get clean output from x_t
         c_skip, c_out, c_in = [
             append_dims(x, x_t.ndim) for x in self.get_scalings_for_boundary_condition(sigmas)

@@ -307,14 +307,11 @@ class OffPolicyAlgorithm(BaseAlgorithm):
             idx = th.multinomial(soft_q_value, num_samples=1) # this mechanism works a bit since all q-values are similar
             scaled_action = scaled_action[idx].cpu().data.numpy()
 
-            # unscaled_action is the direct output from the model
-            
-        # Rescale the action from [low, high] to [-1, 1]
         if isinstance(self.action_space, spaces.Box):
 
             # We store the scaled action in the buffer
-            buffer_action = scaled_action
-            action = self.policy.unscale_action(scaled_action) # action from [low, high]
+            buffer_action = scaled_action # [-1, 1]
+            action = self.policy.unscale_action(scaled_action) # action from [-1, 1] to [low, high]
         else:
             # Discrete case, no need to normalize or clip
             buffer_action = unscaled_action
@@ -428,10 +425,6 @@ class OffPolicyAlgorithm(BaseAlgorithm):
             # Select action randomly or according to policy
             
             actions, buffer_actions = self._sample_action(learning_starts, action_noise, env.num_envs)
-
-            # Rescale and perform action
-            # actions = np.clip(actions, self.action_space.low, self.action_space.high)
-
             new_obs, rewards, dones, infos = env.step(actions)
 
             self.num_timesteps += env.num_envs
